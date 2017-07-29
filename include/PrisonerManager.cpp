@@ -33,8 +33,8 @@ int PrisonerManager::update(float dt, const sf::Vector2f& playerPosition, const 
 	}
 
 	for (auto it = m_prisoners.begin(); it != m_prisoners.end();) {
-		it->update(dt, playerPosition, playerSize);
-		if (it->getCollided())
+		(*it)->update(dt, playerPosition, playerSize);
+		if ((*it)->getCollided())
 			it = m_prisoners.erase(it);
 		else
 			++it;
@@ -51,7 +51,7 @@ void PrisonerManager::draw(sf::RenderTarget & target, sf::RenderStates states) c
 		target.draw(c);
 	}
 	for (int i = 0; i < m_prisoners.size(); i++) {
-		target.draw(m_prisoners[i]);
+		target.draw(*m_prisoners[i]);
 	}
 }
 
@@ -86,7 +86,7 @@ void PrisonerManager::spawnPrisoner(Location location) {
 		if (spawnLoc.remaining == 0) {
 			spawnLoc.active = false;
 		}
-		m_prisoners.push_back(Prisoner(spawnLoc.position));
+		m_prisoners.push_back(std::make_unique<Prisoner>(Prisoner(spawnLoc.position)));
 	}
 	else {
 		std::cout << "not enough time has elapsed for this spawn location" << std::endl;

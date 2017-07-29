@@ -3,6 +3,7 @@
 #include "Prisoner.h"
 #include <unordered_map>
 #include "Bullet.h"
+#include <memory>
 
 class PrisonerManager : public sf::Drawable {
 public:
@@ -80,7 +81,7 @@ private:
 	std::unordered_map<Location, SpawnLoc> m_spawns;
 	//TODO: speed up rates or dynamic amounts depending on state of the game
 
-	std::vector<Prisoner> m_prisoners;
+	std::vector<std::unique_ptr<Prisoner>> m_prisoners;
 	float m_timer;
 	float m_spawnTimer; 
 	float m_spawnRate;

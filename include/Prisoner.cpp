@@ -18,10 +18,8 @@ void Prisoner::update(float dt, const sf::Vector2f & playerPosition, const sf::V
 
 	float distanceBetween = Helpers::getLength(playerPosition - m_position);
 	//its a square so just use the width as if its a radius
-	if (distanceBetween < (m_sprite.getGlobalBounds().width * 0.5f) + (playerSize.x)) {
+	if (distanceBetween < playerSize.x) 
 		m_collided = true;
-		std::cout << "pirsoner hit you" << std::endl;
-	}
 }
 
 bool Prisoner::getCollided() const {
