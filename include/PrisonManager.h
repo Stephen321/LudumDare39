@@ -5,12 +5,13 @@
 #include "Bullet.h"
 #include <memory>
 
-class PrisonerManager : public sf::Drawable {
+class PrisonManager : public sf::Drawable {
 public:
-	PrisonerManager(const sf::Vector2u& windowSize);
+	PrisonManager(const sf::Vector2u& windowSize);
 	int update(float dt, const sf::Vector2f& playerPosition, const sf::Vector2f& playerSize); //returns number of collisions
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	void decreasePower();
+	std::vector<std::unique_ptr<Prisoner>>& getPrisoners();
 private:
 	enum class Location {
 		//MaxPwr
@@ -23,16 +24,20 @@ private:
 		B2 = 6,
 		T3 = 7,
 		B3 = 8,
+		R1,
+		R2,
+		R3,
 		None
 	};
 	struct SpawnLoc {
 		bool active = false;
 		int remaining;
 		sf::Vector2f position;
+		sf::Vector2f wayPointPosition;
+		sf::Sprite sprite;
 	};
 	void spawnPrisoner(Location location);
 	void createSpawnLocs();
-	void checkCollisions(std::vector<Bullet>& bulletPool);
 private:
 	//Locations:
 	//		T1		T2		T3	
@@ -45,11 +50,10 @@ private:
 
 	sf::Vector2u m_windowSize;
 
-	const int MAX_POWER = 3;
 	int m_power;
 
 	//TODO: put all this into json file
-	const float LeftXPos = 0.012;
+	const float LeftXPos = 0.013;
 	const float LeftYOffset1 = 0.159;
 	const float LeftYOffset2 = 0.341;
 	const float LeftYOffset3 = 0.341;
@@ -57,7 +61,7 @@ private:
 	const float TopXOffset1 = 0.225;
 	const float TopXOffset2 = 0.275;
 	const float TopXOffset3 = 0.275;
-	const float TopYPos = 0.022;
+	const float TopYPos = 0.023;
 
 	const float BotXOffset1 = 0.225;
 	const float BotXOffset2 = 0.275;
@@ -81,6 +85,7 @@ private:
 	std::unordered_map<Location, SpawnLoc> m_spawns;
 	//TODO: speed up rates or dynamic amounts depending on state of the game
 
+	int m_prisonersRemaining;
 	std::vector<std::unique_ptr<Prisoner>> m_prisoners;
 	float m_timer;
 	float m_spawnTimer; 

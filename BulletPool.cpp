@@ -30,7 +30,8 @@ void BulletPool::update(float dt) {
 
 void BulletPool::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 	for (int i = 0; i < m_size; i++) {
-		target.draw(m_bullets[i]);
+		if (m_bullets[i].getActive())
+			target.draw(m_bullets[i]);
 	}
 }
 

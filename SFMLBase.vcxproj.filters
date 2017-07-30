@@ -31,9 +31,9 @@
     <ClCompile Include="include\Bullet.cpp" />
     <ClCompile Include="BulletPool.cpp" />
     <ClCompile Include="include\Prisoner.cpp" />
-    <ClCompile Include="include\PrisonerManager.cpp" />
     <ClCompile Include="include\HealthBar.cpp" />
     <ClCompile Include="include\GameUI.cpp" />
+    <ClCompile Include="include\PrisonManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GameData.h">
@@ -78,9 +78,6 @@
     <ClInclude Include="include\Prisoner.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\PrisonerManager.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\HealthBar.h">
       <Filter>include</Filter>
     </ClInclude>
@@ -88,6 +85,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\Constants.h" />
+    <ClInclude Include="include\PrisonManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="include">

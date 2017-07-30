@@ -15,6 +15,9 @@ public:
 	sf::Vector2f getPosition() const;
 	void setActive(bool active);
 	bool getActive() const;
+	sf::Vector2f getSize() const;
+	void setPositionX(float x);
+	void setPositionY(float y);
 	
 protected:
 	sf::Vector2f m_position;

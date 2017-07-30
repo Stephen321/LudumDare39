@@ -1,6 +1,7 @@
 #ifndef GAMEDATA_H
 #define GAMEDATA_H
 #include "SFML\Graphics\Texture.hpp"
+#include "SFML\Graphics\Font.hpp"
 
 class GameData {
 public:
@@ -17,10 +18,10 @@ public:
 
 	//cell doors
 	sf::Texture topbotcellTex;
-	sf::Texture left3cellTex;
-	sf::Texture left4cellTex;
 	sf::Texture right3cellTex;
 	sf::Texture right4cellTex;
+	sf::Texture switchPadTexture;
+	sf::Font levelFont;
 	float textureScaler;
 	unsigned int WINDOW_WIDTH = 1280u; //TODO: come back to this
 	unsigned int WINDOW_HEIGHT = 704u;

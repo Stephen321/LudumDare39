@@ -184,7 +184,7 @@ xcopy /Y "$(ProjectDir)dependencies\sfml\bin\*.dll" "$(TargetDir)"</Command>
     <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\Prisoner.h" />
-    <ClInclude Include="include\PrisonerManager.h" />
+    <ClInclude Include="include\PrisonManager.h" />
     <ClInclude Include="include\Screen.h" />
     <ClInclude Include="include\stdafx.h" />
     <ClInclude Include="include\targetver.h" />
@@ -197,7 +197,7 @@ xcopy /Y "$(ProjectDir)dependencies\sfml\bin\*.dll" "$(TargetDir)"</Command>
     <ClCompile Include="include\HealthBar.cpp" />
     <ClCompile Include="include\Player.cpp" />
     <ClCompile Include="include\Prisoner.cpp" />
-    <ClCompile Include="include\PrisonerManager.cpp" />
+    <ClCompile Include="include\PrisonManager.cpp" />
     <ClCompile Include="src\main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>

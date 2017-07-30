@@ -52,14 +52,3 @@ bool Player::getFiring() const {
 	return m_firing;
 }
 
-sf::Vector2f Player::getSize() const {
-	return sf::Vector2f(m_sprite.getGlobalBounds().width, m_sprite.getGlobalBounds().height);
-}
-
-void Player::setPositionX(float x) {
-	m_position.x = x;
-}
-
-void Player::setPositionY(float y) {
-	m_position.y = y;
-}

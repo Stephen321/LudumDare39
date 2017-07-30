@@ -5,9 +5,11 @@
 class HealthBar : public sf::Drawable {
 public:
 	HealthBar();
-	HealthBar(float maxHealth);
+	HealthBar(float maxHealth, const sf::Color& backgroundOutline, const sf::Color& background, const sf::Color& foreground);
 	bool changeHealth(float change);
-	void update(const sf::Vector2f& position);
+	float getHealth() const;
+	float getMaxHealth() const;
+	void setPosition(const sf::Vector2f& position);
 	void reset();
 	void setYOffset(float yOffset);
 	void setXSize(float xSize);

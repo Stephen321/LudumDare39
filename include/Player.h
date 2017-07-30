@@ -9,10 +9,7 @@ public:
 	void update(float dt) override;
 	void setDirection(sf::Vector2f direction);
 	void setFiring(bool firing);
-	bool getFiring() const;
-	sf::Vector2f getSize() const;
-	void setPositionX(float x);
-	void setPositionY(float y); 
+	bool getFiring() const; 
 private:
 	const float MOVE_SPEED = 175.f;
 	const float RELOAD_TIME = 0.33f;

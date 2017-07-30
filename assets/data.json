@@ -6,9 +6,8 @@
 		"background_texture" : "background.png",
 		"prisoner_texture" : "prisoner.png",
 		"topbotcell_texture" : "topbotcell.png",
-		"left3cell_texture" : "left3cell.png",
-		"left4cell_texture" : "left4cell.png",
 		"right3cell_texture" : "right3cell.png",
-		"right4cell_texture" : "right4cell.png"
+		"right4cell_texture" : "right4cell.png",
+		"switchPad_Texture" : "switchPad.png"
 	}
 }

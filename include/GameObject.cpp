@@ -53,3 +53,15 @@ void GameObject::setActive(bool active) {
 bool GameObject::getActive() const {
 	return m_active;
 }
+
+sf::Vector2f GameObject::getSize() const {
+	return sf::Vector2f(m_sprite.getGlobalBounds().width, m_sprite.getGlobalBounds().height);
+}
+
+void GameObject::setPositionX(float x) {
+	m_position.x = x;
+}
+
+void GameObject::setPositionY(float y) {
+	m_position.y = y;
+}

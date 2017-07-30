@@ -40,11 +40,13 @@ void GameLoader::loadData(const std::string& filePath) {
 	++spritesIt;
 	ptr.topbotcellTex.loadFromFile(spritesPath + spritesIt->value.GetString());
 	++spritesIt;
-	ptr.left3cellTex.loadFromFile(spritesPath + spritesIt->value.GetString());
-	++spritesIt;
-	ptr.left4cellTex.loadFromFile(spritesPath + spritesIt->value.GetString());
-	++spritesIt;
 	ptr.right3cellTex.loadFromFile(spritesPath + spritesIt->value.GetString());
 	++spritesIt;
 	ptr.right4cellTex.loadFromFile(spritesPath + spritesIt->value.GetString());
+
+	++spritesIt;
+	ptr.switchPadTexture.loadFromFile(spritesPath + spritesIt->value.GetString());
+
+
+	ptr.levelFont.loadFromFile("assets/fonts/Prototype.ttf"); 
 }
