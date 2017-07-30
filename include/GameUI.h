@@ -11,7 +11,8 @@ public:
 	bool changePower(float change);
 	float getPower() const;
 	float getMaxPower() const;
-	void setLevel(int level);
+	void reset(int level = 1);
+	void setPrisonerInfo(int remaining, int max);
 private:
 	HealthBar m_health;
 	HealthBar m_power;
@@ -21,4 +22,6 @@ private:
 	const float HealthYSize = 0.022;
 	const float PowerXPos = 0.288;
 	sf::Text m_levelTxt;
+	sf::Text m_prisonersTxt;
+	sf::Sprite m_panel;
 };

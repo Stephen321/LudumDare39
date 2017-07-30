@@ -9,6 +9,7 @@ public:
 	void update(float dt);
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	std::vector<Bullet>& getBullets();
+	void reset();
 
 private:
 	int m_size;

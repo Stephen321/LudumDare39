@@ -30,7 +30,7 @@ int main() {
 	srand((unsigned int)time(NULL));
 	sf::RenderWindow window(sf::VideoMode(1280u, 704u, 32u), "LudumDare39");
 	std::vector<Screen*> Screens;
-	Screen::Type screen = Screen::Type::Game;
+	Screen::Type screen = Screen::Type::Menu;
 	MenuScreen menuScreen;
 	Screens.push_back(&menuScreen);
 	GameScreen gameScreen;

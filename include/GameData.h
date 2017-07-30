@@ -21,6 +21,11 @@ public:
 	sf::Texture right3cellTex;
 	sf::Texture right4cellTex;
 	sf::Texture switchPadTexture;
+	sf::Texture uiPanelTexture;
+	sf::Texture menuTexture;
+	sf::Texture gameOverTexture;
+	
+	int levelReached;
 	sf::Font levelFont;
 	float textureScaler;
 	unsigned int WINDOW_WIDTH = 1280u; //TODO: come back to this

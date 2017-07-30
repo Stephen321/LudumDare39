@@ -18,10 +18,11 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 
 	sf::Vector2u windowSize = window.getSize();
 	BulletPool bulletPool(BULLET_POOL_SIZE);
-	Player player(sf::Vector2f(windowSize.x * 0.5f, windowSize.y * 0.5f), bulletPool);
+	Player player(sf::Vector2f(windowSize.x * TILE_SIZE * 2.f, windowSize.y * 0.5f), bulletPool);
 	PrisonManager prisonManager(windowSize);
 	GameUI gameUI(windowSize);
 	bool showLevelSwitchPads = false;
+	int level = 0;
 
 	struct LevelSwitchPad {
 		sf::Vector2f position;
@@ -91,15 +92,20 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 		int numOfCollision = prisonManager.update(dt, player.getPosition(), player.getSize());
 		if (numOfCollision > 0) {
 			if (gameUI.changeHealth(-numOfCollision) == false) {
-				//TODO: reset game
+				//TODO: reset game cause u ded
+				GameData::getInstance().levelReached = level;
+				return Screen::Type::GameOver;
 			}
 		}
+		int prisonersRemaining = prisonManager.getPrisonersRemaining();
+		int maxPrisoners = prisonManager.getMaxPrisoners();
+		gameUI.setPrisonerInfo(prisonersRemaining, maxPrisoners);
+
 		float previousPower = gameUI.getPower();
 		bool openExit = !gameUI.changePower(-POWER_DRAIN_PER_SECOND * dt);
 		if (openExit) {
 			prisonManager.decreasePower();
 			showLevelSwitchPads = true;
-			//TODO: maybe all prisoners have to be killed too?
 		}
 		else {
 			bool decrease = false;
@@ -134,7 +140,8 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 
 		window.draw(background);
 
-		if (showLevelSwitchPads) {
+		bool lessThan10PercentPrisoners = ((float)prisonersRemaining / maxPrisoners) <= 0.1f;
+		if (showLevelSwitchPads && lessThan10PercentPrisoners) {
 			for (int i = 0; i < LevelSwitchPadSize; i++) {
 				window.draw(levelSwitchPads[i].sprite);
 
@@ -142,6 +149,12 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 				if (circleCollision(player.getPosition(), levelSwitchPads[i].triggerPosition, levelSwitchPads[i].triggerRadius + player.getSize().x)) {
 					//TODO: switch level (restart with different values)
 					std::cout << "switching level" << std::endl;
+					level++;
+					prisonManager.newLevel();
+					player.reset();
+					bulletPool.reset();
+					showLevelSwitchPads = false;
+					gameUI.reset(level);
 				}
 			}
 		}

@@ -12,6 +12,9 @@ public:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	void decreasePower();
 	std::vector<std::unique_ptr<Prisoner>>& getPrisoners();
+	void newLevel();
+	int getPrisonersRemaining() const;
+	int getMaxPrisoners() const;
 private:
 	enum class Location {
 		//MaxPwr
@@ -68,23 +71,32 @@ private:
 	const float BotXOffset3 = 0.275;
 	const float BotYPos = 0.978;
 
-	//how many and at what rate to spawn for the different power levels= lower is harder
-	const float MaxPwrSpawnRate = 1.f; 
-	const int MaxPwrAmount = 10;
+	const int MaxLevel = 10; //after this level there is no increase in spawn rate, just numbers
+	//consts are by what value they change per level 
+	const float MaxPwrSpawnRate = 0.3f; 
+	const int MaxPwrAmount = 1;
+	float m_maxPwrSpawnRate;
+	float m_maxPwrAmount;
+	
+	const float HighPwrSpawnRate = 0.25f;
+	const int HighPwrAmount = 2;
+	float m_highPwrSpawnRate;
+	float m_highPwrAmount;
 
-	const float HighPwrSpawnRate = 0.8f;
-	const int HighPwrAmount = 15;
+	const float MediumPwrSpawnRate = 0.15f;
+	const int MediumPwrAmount = 3;
+	float m_mediumPwrSpawnRate;
+	float m_mediumPwrAmount;
 
-	const float MediumPwrSpawnRate = 0.6f;
-	const int MediumPwrAmount = 20;
-	const int MediumPwrSpawnChance = 1;
-
-	const float LowPwrSpawnRate = 0.3f;
-	const int LowPwrAmount = 25;
+	const float LowPwrSpawnRate = 0.1f;
+	const int LowPwrAmount = 4;
+	float m_lowPwrSpawnRate;
+	float m_lowPwrAmount;
 
 	std::unordered_map<Location, SpawnLoc> m_spawns;
 	//TODO: speed up rates or dynamic amounts depending on state of the game
 
+	int m_maxPrisoners;
 	int m_prisonersRemaining;
 	std::vector<std::unique_ptr<Prisoner>> m_prisoners;
 	float m_timer;

@@ -4,7 +4,8 @@ Player::Player(const sf::Vector2f& startPosition, BulletPool& bulletPool) :
 	GameObject(Type::Player)
 	, m_firing(false)
 	, m_bulletPool(bulletPool)
-	, m_reloadTimer(0.f) {
+	, m_reloadTimer(0.f)
+	, m_startX(startPosition.x) {
 	m_position = startPosition;
 }
 
@@ -50,5 +51,11 @@ void Player::setFiring(bool firing) {
 
 bool Player::getFiring() const {
 	return m_firing;
+}
+
+void Player::reset() {
+	m_firing = false;
+	m_reloadTimer = 0.f;
+	m_position.x = m_startX;
 }
 

@@ -46,7 +46,13 @@ void GameLoader::loadData(const std::string& filePath) {
 
 	++spritesIt;
 	ptr.switchPadTexture.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.uiPanelTexture.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.menuTexture.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.gameOverTexture.loadFromFile(spritesPath + spritesIt->value.GetString());
 
-
+	
 	ptr.levelFont.loadFromFile("assets/fonts/Prototype.ttf"); 
 }

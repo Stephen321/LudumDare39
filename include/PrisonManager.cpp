@@ -8,8 +8,31 @@ PrisonManager::PrisonManager(const sf::Vector2u& windowSize) :
 	m_windowSize(windowSize)
 	, m_timer(0.f)
 	, m_spawnTimer(0.f)
-	, m_spawnRate(MaxPwrSpawnRate)
 	, m_power(MAX_POWER){
+
+	m_maxPwrSpawnRate = MaxPwrSpawnRate * MaxLevel;
+	m_maxPwrAmount = MaxPwrAmount;
+	//TODO: change this so its not as linear...
+	//with values of:
+	// SpawnRate = 0.3f;
+	// Amount = 3;
+	// MaxLevel = 10
+	//Level	      1,		2,		3,		  4,		5,		6,		 7,		  8,		9,		 [10],		  11
+	//Rate:	     3.f	   2.7f     2.4f     2.1f     1.8f     1.5f     1.2f     0.9f     0.6f       0.3f        0.3f
+	//Amount:    3		    6		 9		  12	   15		18		 21		  24		27		  30		33
+	//This is only while at a MaxPower level, once high power is reached then spawn rate values from the below are used
+
+	m_highPwrSpawnRate = HighPwrSpawnRate * MaxLevel;
+	m_highPwrAmount = HighPwrAmount;
+
+	m_mediumPwrSpawnRate = MediumPwrSpawnRate * MaxLevel;
+	m_mediumPwrAmount = MediumPwrAmount;
+
+	m_lowPwrSpawnRate = LowPwrSpawnRate * MaxLevel;
+	m_lowPwrAmount = LowPwrAmount;
+
+	m_spawnRate = m_maxPwrAmount;
+
 	createSpawnLocs();
 }
 
@@ -20,8 +43,7 @@ int PrisonManager::update(float dt, const sf::Vector2f& playerPosition, const sf
 	if (m_spawnTimer > m_spawnRate) {
 		std::vector<Location> possibleLocations;
 		for (auto it = m_spawns.begin(); it != m_spawns.end(); ++it) {
-			//if its actively spawning prisoners and make sure its not the right gates as they may be open but we dont need to try spawn there
-			if (it->second.active && (it->first != Location::R1 || it->first != Location::R2 || it->first != Location::R3)) {
+			if (it->second.active && it->second.remaining > 0 && (it->first != Location::R1 && it->first != Location::R2 && it->first != Location::R3)) {
 				possibleLocations.push_back(it->first);
 			}
 		}
@@ -81,24 +103,56 @@ void PrisonManager::decreasePower() {
 	}
 	else if (m_power == MAX_POWER - 1) {
 		//TODO: enable other locations
-		m_spawnRate = HighPwrSpawnRate;
+		m_spawnRate = m_highPwrSpawnRate;
 		m_spawns[Location::T1].active = true;
 		m_spawns[Location::B1].active = true;
 	}
 	else if (m_power == MAX_POWER - 2) {
-		m_spawnRate = MediumPwrSpawnRate;
+		m_spawnRate = m_mediumPwrSpawnRate;
 		m_spawns[Location::T2].active = true;
 		m_spawns[Location::B2].active = true;
 	}
 	else if (m_power == MAX_POWER - 3) {
-		m_spawnRate = LowPwrSpawnRate;
+		m_spawnRate = m_lowPwrSpawnRate;
 		m_spawns[Location::T3].active = true;
 		m_spawns[Location::B3].active = true;
 	}
+	std::cout << "Current spawn rate: " << m_spawnRate << std::endl;
 }
 
 std::vector<std::unique_ptr<Prisoner>>& PrisonManager::getPrisoners() {
 	return m_prisoners;
+}
+
+void PrisonManager::newLevel() {
+	m_timer = 0.f;
+	m_spawnTimer = 0.f;
+	m_power = MAX_POWER;
+	m_prisoners.clear();
+
+	m_maxPwrSpawnRate -= MaxPwrSpawnRate;
+	m_maxPwrAmount += MaxPwrAmount;
+
+	m_highPwrSpawnRate -= HighPwrSpawnRate;
+	m_highPwrAmount += HighPwrAmount;
+
+	m_mediumPwrSpawnRate -= MediumPwrSpawnRate;
+	m_mediumPwrAmount += MediumPwrAmount;
+
+	m_lowPwrSpawnRate -=  LowPwrSpawnRate;
+	m_lowPwrAmount += LowPwrAmount;
+
+	m_spawnRate = m_maxPwrAmount;
+
+	createSpawnLocs();
+}
+
+int PrisonManager::getPrisonersRemaining() const {
+	return m_prisonersRemaining;
+}
+
+int PrisonManager::getMaxPrisoners() const {
+	return m_maxPrisoners;
 }
 
 
@@ -106,9 +160,6 @@ void PrisonManager::spawnPrisoner(Location location) {
 	SpawnLoc& spawnLoc = m_spawns[location];
 	if (spawnLoc.remaining > 0) {
 		spawnLoc.remaining--;
-		if (spawnLoc.remaining == 0) {
-			spawnLoc.active = false;
-		}
 		m_prisoners.push_back(std::make_unique<Prisoner>(Prisoner(spawnLoc.position, spawnLoc.wayPointPosition)));
 	}
 	else {
@@ -119,61 +170,58 @@ void PrisonManager::spawnPrisoner(Location location) {
 void PrisonManager::createSpawnLocs() {
 
 	GameData& data = GameData::getInstance();
-	m_prisonersRemaining = 0;
-	//TODO: function?
-	m_prisonersRemaining += MaxPwrAmount + HighPwrAmount + MediumPwrAmount + LowPwrAmount;
+	m_maxPrisoners = (m_maxPwrAmount * 3) + (m_highPwrAmount * 2) + (m_mediumPwrAmount * 2) + (m_lowPwrAmount * 2);
+	m_prisonersRemaining = m_maxPrisoners;
+	std::cout << "Prisoners Remaining: " << m_prisonersRemaining << std::endl;
 
 	m_spawns[Location::L1].position.x = LeftXPos * m_windowSize.x;
 	m_spawns[Location::L1].position.y = LeftYOffset1 * m_windowSize.y;
-	m_spawns[Location::L1].remaining = MaxPwrAmount;
-	m_spawns[Location::L1].active = true;
+	m_spawns[Location::L1].remaining = m_maxPwrAmount;
 	m_spawns[Location::L1].wayPointPosition = sf::Vector2f(1.f, 0.f);
 	
 	m_spawns[Location::L2].position.x = LeftXPos * m_windowSize.x;
 	m_spawns[Location::L2].position.y = m_spawns[Location::L1].position.y + (LeftYOffset2 * m_windowSize.y);
-	m_spawns[Location::L2].remaining = MaxPwrAmount;
-	m_spawns[Location::L2].active = true;
+	m_spawns[Location::L2].remaining = m_maxPwrAmount;
 	m_spawns[Location::L2].wayPointPosition = sf::Vector2f(1.f, 0.f);
 
 	m_spawns[Location::L3].position.x = LeftXPos * m_windowSize.x;
 	m_spawns[Location::L3].position.y = m_spawns[Location::L2].position.y + (LeftYOffset3 * m_windowSize.y);
-	m_spawns[Location::L3].remaining = MaxPwrAmount;
-	m_spawns[Location::L3].active = true;
+	m_spawns[Location::L3].remaining = m_maxPwrAmount;
 	m_spawns[Location::L3].wayPointPosition = sf::Vector2f(1.f, 0.f);
 
 	m_spawns[Location::T1].position.x = TopXOffset1 * m_windowSize.x;
 	m_spawns[Location::T1].position.y = TopYPos * m_windowSize.y;
-	m_spawns[Location::T1].remaining = HighPwrAmount;
+	m_spawns[Location::T1].remaining = m_highPwrAmount;
 	m_spawns[Location::T1].sprite.setTexture(data.topbotcellTex);
 	m_spawns[Location::T1].wayPointPosition = sf::Vector2f(0.f, 1.f);
 
 	m_spawns[Location::T2].position.x = m_spawns[Location::T1].position.x + (TopXOffset2 * m_windowSize.x);
 	m_spawns[Location::T2].position.y = TopYPos * m_windowSize.y;
-	m_spawns[Location::T2].remaining = MediumPwrAmount;
+	m_spawns[Location::T2].remaining = m_mediumPwrAmount;
 	m_spawns[Location::T2].sprite.setTexture(data.topbotcellTex);
 	m_spawns[Location::T2].wayPointPosition = sf::Vector2f(0.f, 1.f);
 
 	m_spawns[Location::T3].position.x = m_spawns[Location::T2].position.x + (TopXOffset3 * m_windowSize.x);
 	m_spawns[Location::T3].position.y = TopYPos * m_windowSize.y;
-	m_spawns[Location::T3].remaining = LowPwrAmount;
+	m_spawns[Location::T3].remaining = m_lowPwrAmount;
 	m_spawns[Location::T3].sprite.setTexture(data.topbotcellTex);
 	m_spawns[Location::T3].wayPointPosition = sf::Vector2f(0.f, 1.f);
 
 	m_spawns[Location::B1].position.x = TopXOffset1 * m_windowSize.x;
 	m_spawns[Location::B1].position.y = BotYPos * m_windowSize.y;
-	m_spawns[Location::B1].remaining = HighPwrAmount;
+	m_spawns[Location::B1].remaining = m_highPwrAmount;
 	m_spawns[Location::B1].sprite.setTexture(data.topbotcellTex);
 	m_spawns[Location::B1].wayPointPosition = sf::Vector2f(0.f, -1.f);
 
 	m_spawns[Location::B2].position.x = m_spawns[Location::B1].position.x + (TopXOffset2 * m_windowSize.x);
 	m_spawns[Location::B2].position.y = BotYPos * m_windowSize.y;
-	m_spawns[Location::B2].remaining = MediumPwrAmount;
+	m_spawns[Location::B2].remaining = m_mediumPwrAmount;
 	m_spawns[Location::B2].sprite.setTexture(data.topbotcellTex);
 	m_spawns[Location::B2].wayPointPosition = sf::Vector2f(0.f, -1.f);
 
 	m_spawns[Location::B3].position.x = m_spawns[Location::B2].position.x + (TopXOffset3 * m_windowSize.x);
 	m_spawns[Location::B3].position.y = BotYPos * m_windowSize.y;
-	m_spawns[Location::B3].remaining = LowPwrAmount;
+	m_spawns[Location::B3].remaining = m_lowPwrAmount;
 	m_spawns[Location::B3].sprite.setTexture(data.topbotcellTex);
 	m_spawns[Location::B3].wayPointPosition = sf::Vector2f(0.f, -1.f);
 
@@ -198,5 +246,18 @@ void PrisonManager::createSpawnLocs() {
 		float halfHeight = it->second.sprite.getGlobalBounds().height * 0.5f;
 		it->second.sprite.setOrigin(halfWidth, halfHeight);
 		it->second.wayPointPosition = it->second.position + (it->second.wayPointPosition * (TILE_SIZE * m_windowSize.x * 1.2f));
+		it->second.active = false;
 	}
+	m_spawns[Location::L1].active = true;
+	m_spawns[Location::L2].active = true;
+	m_spawns[Location::L3].active = true;
+
+
+	std::cout << "----------------------------------------" << std::endl;
+	std::cout << "\t\t" << "Rate" << "\t" << "Amount" << std::endl;
+	std::cout << "MaxPwr:\t\t " << m_maxPwrSpawnRate << "\t  " << m_maxPwrAmount << std::endl;
+	std::cout << "HighPwr:\t " << m_highPwrSpawnRate << "\t  " << m_highPwrAmount << std::endl;
+	std::cout << "MediumPwr:\t " << m_mediumPwrSpawnRate << "\t  " << m_mediumPwrAmount << std::endl;
+	std::cout << "LowPwr:\t\t " << m_lowPwrSpawnRate << "\t  " << m_lowPwrAmount << std::endl;
+	std::cout << "----------------------------------------" << std::endl;
 }

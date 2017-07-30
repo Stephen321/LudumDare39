@@ -15,17 +15,28 @@ GameUI::GameUI(const sf::Vector2u windowSize) :
 	m_power.setYSize(HealthYSize * windowSize.y);
 	m_power.setPosition(sf::Vector2f(m_windowSize.x * PowerXPos, 5.f));
 
-	m_levelTxt = sf::Text("test", GameData::getInstance().levelFont, 18.f);
-	m_levelTxt.setFillColor(sf::Color::White);
+	m_levelTxt = sf::Text("", GameData::getInstance().levelFont, 18.f);
+	m_levelTxt.setFillColor(sf::Color(50,50,50));
 	m_levelTxt.setPosition(TILE_SIZE * m_windowSize.x, 5.f);
 	m_levelTxt.setStyle(sf::Text::Regular);
 	m_levelTxt.setString("Level: 1");
+
+	m_prisonersTxt = sf::Text("", GameData::getInstance().levelFont, 18.f);
+	m_prisonersTxt.setFillColor(sf::Color::Red);
+	m_prisonersTxt.setPosition(TILE_SIZE * m_windowSize.x, 35.f);
+	m_prisonersTxt.setStyle(sf::Text::Regular);
+	m_prisonersTxt.setString("0 / 0 Prisoners");
+
+	m_panel.setTexture(GameData::getInstance().uiPanelTexture);
+	m_panel.setPosition(TILE_SIZE * 0.5f * m_windowSize.x, 5);
 }
 
 void GameUI::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 	target.draw(m_health);
 	target.draw(m_power);
+	target.draw(m_panel);
 	target.draw(m_levelTxt);
+	target.draw(m_prisonersTxt);
 }
 
 bool GameUI::changeHealth(float change) {
@@ -44,6 +55,16 @@ float GameUI::getMaxPower() const {
 	return m_power.getMaxHealth();
 }
 
-void GameUI::setLevel(int level) {
-	m_levelTxt.setString("Level: " + std::to_string(level));
+void GameUI::reset(int level) {
+	m_levelTxt.setString("Level: " + std::to_string(level + 1));
+	m_health.reset();
+	m_power.reset();
+}
+
+void GameUI::setPrisonerInfo(int remaining, int max) {
+	m_prisonersTxt.setFillColor(sf::Color::Red);
+	m_prisonersTxt.setString(std::to_string(remaining) + " / " + std::to_string(max) + " Prisoners.");
+	bool lessThan10PercentPrisoners = ((float)remaining / max) <= 0.1f;
+	if (lessThan10PercentPrisoners)
+		m_prisonersTxt.setFillColor(sf::Color(20,160,20));
 }

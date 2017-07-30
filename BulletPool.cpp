@@ -1,6 +1,7 @@
 #include "BulletPool.h"
 
 #include "GameData.h"
+#include "BulletPool.h"
 
 
 BulletPool::BulletPool(int size)
@@ -37,4 +38,9 @@ void BulletPool::draw(sf::RenderTarget & target, sf::RenderStates states) const 
 
 std::vector<Bullet>& BulletPool::getBullets() {
 	return m_bullets;
+}
+
+void BulletPool::reset() {
+	m_bullets.clear();
+	m_bullets = std::vector<Bullet>(m_size, Bullet());
 }

@@ -10,9 +10,11 @@ public:
 	void setDirection(sf::Vector2f direction);
 	void setFiring(bool firing);
 	bool getFiring() const; 
+	void reset();
 private:
 	const float MOVE_SPEED = 175.f;
 	const float RELOAD_TIME = 0.33f;
+	float m_startX;
 	bool m_firing;
 	BulletPool& m_bulletPool;
 	float m_reloadTimer;
