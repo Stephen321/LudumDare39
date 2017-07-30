@@ -4,7 +4,6 @@
 #include "Helpers.h"
 #include "GameScreen.h"
 #include "Constants.h"
-#include <iostream>
 
 namespace {
 	const unsigned int BULLET_POOL_SIZE = 100;
@@ -16,13 +15,16 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 	sf::Clock frameClock;
 	bool pause = false;
 
+	AudioManager audioManager;
 	sf::Vector2u windowSize = window.getSize();
-	BulletPool bulletPool(BULLET_POOL_SIZE);
+	BulletPool bulletPool(BULLET_POOL_SIZE, audioManager);
 	Player player(sf::Vector2f(windowSize.x * TILE_SIZE * 2.f, windowSize.y * 0.5f), bulletPool);
 	PrisonManager prisonManager(windowSize);
 	GameUI gameUI(windowSize);
 	bool showLevelSwitchPads = false;
 	int level = 0;
+	audioManager.play(AudioManager::Type::Select);
+	audioManager.play(AudioManager::Type::GameMusic);
 
 	struct LevelSwitchPad {
 		sf::Vector2f position;
@@ -51,9 +53,9 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 	levelSwitchPads[2].sprite.setPosition(levelSwitchPads[2].position);
 	levelSwitchPads[2].triggerPosition = levelSwitchPads[2].position + sf::Vector2f(TILE_SIZE * 2.2f * windowSize.x, 0.f);
 
-	//100 "power points" per power level
-
+	float m_powerDecreasePerSecond = POWER_DRAIN_PER_SECOND;
 	sf::Sprite background(GameData::getInstance().backgroundTexture);
+	background.setScale(windowSize.x / background.getLocalBounds().width, windowSize.y / background.getLocalBounds().height);
 	
 	while (Running)	{
 		while (window.pollEvent(Event)) {
@@ -67,16 +69,9 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 			if (Event.type == sf::Event::GainedFocus) {
 				pause = false;
 			}
-			//left mouse button pressed  then start firing
 			if (Event.type == sf::Event::MouseButtonPressed &&
 				Event.mouseButton.button == sf::Mouse::Button::Left) {
 				player.setFiring(true);
-			}
-			//already firing and left button  is released
-			else if (player.getFiring() && 
-					 Event.type == sf::Event::MouseButtonReleased &&
-					 Event.mouseButton.button == sf::Mouse::Button::Left) {
-				player.setFiring(false);
 			}
 		}		
 
@@ -92,10 +87,11 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 		int numOfCollision = prisonManager.update(dt, player.getPosition(), player.getSize());
 		if (numOfCollision > 0) {
 			if (gameUI.changeHealth(-numOfCollision) == false) {
-				//TODO: reset game cause u ded
+				audioManager.play(AudioManager::Type::Death);
 				GameData::getInstance().levelReached = level;
 				return Screen::Type::GameOver;
 			}
+			audioManager.play(AudioManager::Type::Hit);
 		}
 		int prisonersRemaining = prisonManager.getPrisonersRemaining();
 		int maxPrisoners = prisonManager.getMaxPrisoners();
@@ -117,8 +113,11 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 					}
 				}
 			}
-			if (decrease)
+			if (decrease) {
 				prisonManager.decreasePower();
+				gameUI.decreasePowerLevel();
+				audioManager.play(AudioManager::Type::CellDoor);
+			}
 		}
 
 		//restrict to bounds of the play area
@@ -133,28 +132,29 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 			}
 		}
 
-		checkCollisions(bullets, prisonManager.getPrisoners());
+		checkCollisions(bullets, prisonManager.getPrisoners(), audioManager);
 
 		//draw game screen
 		window.clear(sf::Color(96, 23, 54));
 
 		window.draw(background);
 
-		bool lessThan10PercentPrisoners = ((float)prisonersRemaining / maxPrisoners) <= 0.1f;
-		if (showLevelSwitchPads && lessThan10PercentPrisoners) {
+		if (showLevelSwitchPads && prisonersRemaining == 0) {
+			gameUI.decreasePowerLevel();
 			for (int i = 0; i < LevelSwitchPadSize; i++) {
 				window.draw(levelSwitchPads[i].sprite);
 
-				//also check player collisions while we are here
+				//also check player collisions with them
 				if (circleCollision(player.getPosition(), levelSwitchPads[i].triggerPosition, levelSwitchPads[i].triggerRadius + player.getSize().x)) {
-					//TODO: switch level (restart with different values)
-					std::cout << "switching level" << std::endl;
 					level++;
 					prisonManager.newLevel();
 					player.reset();
 					bulletPool.reset();
 					showLevelSwitchPads = false;
 					gameUI.reset(level);
+					m_powerDecreasePerSecond += POWER_CHANGE_PER_LEVEL;
+					if (m_powerDecreasePerSecond > POWER_DRAIN_MAX)
+						m_powerDecreasePerSecond = POWER_DRAIN_MAX;
 				}
 			}
 		}
@@ -171,15 +171,18 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 	return Screen::Type::GameOver;
 }
 
-void GameScreen::checkCollisions(std::vector<Bullet>& bullets, std::vector<std::unique_ptr<Prisoner>>& prisoners) {
+void GameScreen::checkCollisions(std::vector<Bullet>& bullets, std::vector<std::unique_ptr<Prisoner>>& prisoners, AudioManager& audioManager) {
 	for (int i = 0; i < bullets.size(); i++) {
 		if (bullets[i].getActive()) {
 			for (int j = 0; j < prisoners.size(); j++) {
 				float minDistance = prisoners[j]->getSize().x * 0.5f;
 				if (circleCollision(bullets[i].getPosition(), prisoners[j]->getPosition(), minDistance)) {
 					bullets[i].setActive(false);
-					prisoners[j]->decreaseHealth();
-
+					int healthRemaining = prisoners[j]->decreaseHealth();
+					if (healthRemaining == 0) 
+						audioManager.play(AudioManager::Type::Death);
+					else
+						audioManager.play(AudioManager::Type::Hit);
 				}
 			}
 		}

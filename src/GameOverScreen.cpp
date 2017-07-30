@@ -1,6 +1,7 @@
 #include "GameOverScreen.h"
 #include "GameData.h"
 #include "Constants.h"
+#include "AudioManager.h"
 
 Screen::Type GameOverScreen::run(sf::RenderWindow &window) {
 	sf::Event Event;
@@ -20,7 +21,9 @@ Screen::Type GameOverScreen::run(sf::RenderWindow &window) {
 	text.setStyle(sf::Text::Regular);
 	text.setString(std::to_string(GameData::getInstance().levelReached + 1));
 
+	AudioManager audioManager;
 
+	audioManager.play(AudioManager::Type::GameOverMusic);
 	while (Running)	{
 		float dt = frameClock.restart().asSeconds();
 
@@ -31,6 +34,7 @@ Screen::Type GameOverScreen::run(sf::RenderWindow &window) {
 			}
 
 			if (Event.type == sf::Event::KeyReleased && Event.key.code == sf::Keyboard::Space) {
+				audioManager.play(AudioManager::Type::Select);
 				return Screen::Type::Menu;
 			}
 		}

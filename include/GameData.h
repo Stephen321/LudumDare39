@@ -1,7 +1,8 @@
-#ifndef GAMEDATA_H
-#define GAMEDATA_H
+#pragma once
+
 #include "SFML\Graphics\Texture.hpp"
 #include "SFML\Graphics\Font.hpp"
+#include "SFML\Audio.hpp"
 
 class GameData {
 public:
@@ -15,8 +16,6 @@ public:
 	sf::Texture bulletTexture;
 	sf::Texture prisonerTexture;
 	sf::Texture backgroundTexture;
-
-	//cell doors
 	sf::Texture topbotcellTex;
 	sf::Texture right3cellTex;
 	sf::Texture right4cellTex;
@@ -24,13 +23,30 @@ public:
 	sf::Texture uiPanelTexture;
 	sf::Texture menuTexture;
 	sf::Texture gameOverTexture;
+	sf::Texture powerIconTex;
+	sf::Texture healthIconTex;
+	sf::Texture powerOverlayTex;
+	sf::Texture highPwrOverlayTex;
+	sf::Texture mediumPwrOverlayTex;
+	sf::Texture lowPwrOverlayTex;
+	sf::Texture noPwrOverlayTex;
+
+	sf::SoundBuffer cellDoorBuffer;
+	sf::SoundBuffer death1Buffer;
+	sf::SoundBuffer death2Buffer;
+	sf::SoundBuffer gunshotBuffer;
+	sf::SoundBuffer hit1Buffer;
+	sf::SoundBuffer hit2Buffer;
+	sf::SoundBuffer hit3Buffer;
+	sf::SoundBuffer selectBuffer;
+	sf::SoundBuffer alarmBuffer;
 	
 	int levelReached;
 	sf::Font levelFont;
 	float textureScaler;
-	unsigned int WINDOW_WIDTH = 1280u; //TODO: come back to this
+	unsigned int WINDOW_WIDTH = 1280u; 
 	unsigned int WINDOW_HEIGHT = 704u;
+
 private:
 	GameData();
 };
-#endif

@@ -11,7 +11,6 @@ Player::Player(const sf::Vector2f& startPosition, BulletPool& bulletPool) :
 
 void Player::update(float dt) {
 	sf::Vector2f velocity;
-	//check keyboard state 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
 		velocity.y += -MOVE_SPEED;
 	}
@@ -31,11 +30,16 @@ void Player::update(float dt) {
 	if (m_firing) {
 		if (m_reloadTimer > RELOAD_TIME) {
 			m_reloadTimer = 0.f;
-			sf::Vector2f bulletPos = m_position; //our centre
+			sf::Vector2f bulletPos = m_position;
 			bulletPos += Helpers::normaliseCopy(m_direction) *
-						(m_sprite.getGlobalBounds().width * 0.5f); //
-			m_bulletPool.fire(bulletPos, m_direction);
+						(m_sprite.getGlobalBounds().width * 0.5f); 
+			if (m_bulletPool.fire(bulletPos, m_direction)) {
+				sf::Vector2f knockBack = -velocity;
+				Helpers::limit(knockBack, 5);
+				m_position += knockBack;
+			}
 		}
+		m_firing = false;
 
 	}
 	GameObject::update(dt);

@@ -11,9 +11,10 @@ public:
 	void setFiring(bool firing);
 	bool getFiring() const; 
 	void reset();
+
 private:
-	const float MOVE_SPEED = 175.f;
-	const float RELOAD_TIME = 0.33f;
+	const float MOVE_SPEED = 200.f;
+	const float RELOAD_TIME = 0.15f;
 	float m_startX;
 	bool m_firing;
 	BulletPool& m_bulletPool;

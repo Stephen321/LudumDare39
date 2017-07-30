@@ -15,6 +15,7 @@ public:
 	void newLevel();
 	int getPrisonersRemaining() const;
 	int getMaxPrisoners() const;
+
 private:
 	enum class Location {
 		//MaxPwr
@@ -41,6 +42,7 @@ private:
 	};
 	void spawnPrisoner(Location location);
 	void createSpawnLocs();
+
 private:
 	//Locations:
 	//		T1		T2		T3	
@@ -55,7 +57,6 @@ private:
 
 	int m_power;
 
-	//TODO: put all this into json file
 	const float LeftXPos = 0.013;
 	const float LeftYOffset1 = 0.159;
 	const float LeftYOffset2 = 0.341;
@@ -94,7 +95,6 @@ private:
 	float m_lowPwrAmount;
 
 	std::unordered_map<Location, SpawnLoc> m_spawns;
-	//TODO: speed up rates or dynamic amounts depending on state of the game
 
 	int m_maxPrisoners;
 	int m_prisonersRemaining;

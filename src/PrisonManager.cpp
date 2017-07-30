@@ -1,7 +1,6 @@
 #include "PrisonManager.h"
 #include "GameData.h"
 #include "Helpers.h"
-#include <iostream>
 #include "Constants.h"
 
 PrisonManager::PrisonManager(const sf::Vector2u& windowSize) :
@@ -9,18 +8,16 @@ PrisonManager::PrisonManager(const sf::Vector2u& windowSize) :
 	, m_timer(0.f)
 	, m_spawnTimer(0.f)
 	, m_power(MAX_POWER){
-
-	m_maxPwrSpawnRate = MaxPwrSpawnRate * MaxLevel;
-	m_maxPwrAmount = MaxPwrAmount;
-	//TODO: change this so its not as linear...
-	//with values of:
+	// example:
 	// SpawnRate = 0.3f;
 	// Amount = 3;
 	// MaxLevel = 10
 	//Level	      1,		2,		3,		  4,		5,		6,		 7,		  8,		9,		 [10],		  11
 	//Rate:	     3.f	   2.7f     2.4f     2.1f     1.8f     1.5f     1.2f     0.9f     0.6f       0.3f        0.3f
 	//Amount:    3		    6		 9		  12	   15		18		 21		  24		27		  30		33
-	//This is only while at a MaxPower level, once high power is reached then spawn rate values from the below are used
+
+	m_maxPwrSpawnRate = MaxPwrSpawnRate * MaxLevel;
+	m_maxPwrAmount = MaxPwrAmount;
 
 	m_highPwrSpawnRate = HighPwrSpawnRate * MaxLevel;
 	m_highPwrAmount = HighPwrAmount;
@@ -70,19 +67,6 @@ int PrisonManager::update(float dt, const sf::Vector2f& playerPosition, const sf
 }
 
 void PrisonManager::draw(sf::RenderTarget & target, sf::RenderStates states) const {
-	//debug
-	for (auto it = m_spawns.begin(); it != m_spawns.end(); ++it) {
-		sf::CircleShape c(4);
-		c.setFillColor(sf::Color::Red);
-		c.setPosition((*it).second.position);
-		target.draw(c);
-
-		sf::CircleShape c2(4);
-		c2.setFillColor(sf::Color::Yellow);
-		c2.setPosition((*it).second.wayPointPosition);
-		target.draw(c2);
-	}
-
 	for (int i = 0; i < m_prisoners.size(); i++) {
 		target.draw(*m_prisoners[i]);
 	}
@@ -95,14 +79,13 @@ void PrisonManager::draw(sf::RenderTarget & target, sf::RenderStates states) con
 
 void PrisonManager::decreasePower() {
 	m_power--;
-	if (m_power < 0) {//TODO: or all prisoners dead?
+	if (m_power < 0) {
 		m_spawns[Location::R1].active = true;
 		m_spawns[Location::R2].active = true;
 		m_spawns[Location::R3].active = true;
 		return;
 	}
 	else if (m_power == MAX_POWER - 1) {
-		//TODO: enable other locations
 		m_spawnRate = m_highPwrSpawnRate;
 		m_spawns[Location::T1].active = true;
 		m_spawns[Location::B1].active = true;
@@ -117,7 +100,6 @@ void PrisonManager::decreasePower() {
 		m_spawns[Location::T3].active = true;
 		m_spawns[Location::B3].active = true;
 	}
-	std::cout << "Current spawn rate: " << m_spawnRate << std::endl;
 }
 
 std::vector<std::unique_ptr<Prisoner>>& PrisonManager::getPrisoners() {
@@ -162,9 +144,6 @@ void PrisonManager::spawnPrisoner(Location location) {
 		spawnLoc.remaining--;
 		m_prisoners.push_back(std::make_unique<Prisoner>(Prisoner(spawnLoc.position, spawnLoc.wayPointPosition)));
 	}
-	else {
-		std::cout << "no remaing prisoners at this location: " << (int)location << std::endl;
-	}
 }
 
 void PrisonManager::createSpawnLocs() {
@@ -172,7 +151,6 @@ void PrisonManager::createSpawnLocs() {
 	GameData& data = GameData::getInstance();
 	m_maxPrisoners = (m_maxPwrAmount * 3) + (m_highPwrAmount * 2) + (m_mediumPwrAmount * 2) + (m_lowPwrAmount * 2);
 	m_prisonersRemaining = m_maxPrisoners;
-	std::cout << "Prisoners Remaining: " << m_prisonersRemaining << std::endl;
 
 	m_spawns[Location::L1].position.x = LeftXPos * m_windowSize.x;
 	m_spawns[Location::L1].position.y = LeftYOffset1 * m_windowSize.y;
@@ -225,8 +203,6 @@ void PrisonManager::createSpawnLocs() {
 	m_spawns[Location::B3].sprite.setTexture(data.topbotcellTex);
 	m_spawns[Location::B3].wayPointPosition = sf::Vector2f(0.f, -1.f);
 
-
-	//putting the right gates in here just to make it easier instead of seperating them
 	m_spawns[Location::R1].position.x = m_windowSize.x - (LeftXPos * m_windowSize.x);
 	m_spawns[Location::R1].position.y = LeftYOffset1 * m_windowSize.y;
 	m_spawns[Location::R1].sprite.setTexture(data.right3cellTex);
@@ -253,11 +229,11 @@ void PrisonManager::createSpawnLocs() {
 	m_spawns[Location::L3].active = true;
 
 
-	std::cout << "----------------------------------------" << std::endl;
-	std::cout << "\t\t" << "Rate" << "\t" << "Amount" << std::endl;
-	std::cout << "MaxPwr:\t\t " << m_maxPwrSpawnRate << "\t  " << m_maxPwrAmount << std::endl;
-	std::cout << "HighPwr:\t " << m_highPwrSpawnRate << "\t  " << m_highPwrAmount << std::endl;
-	std::cout << "MediumPwr:\t " << m_mediumPwrSpawnRate << "\t  " << m_mediumPwrAmount << std::endl;
-	std::cout << "LowPwr:\t\t " << m_lowPwrSpawnRate << "\t  " << m_lowPwrAmount << std::endl;
-	std::cout << "----------------------------------------" << std::endl;
+	//std::cout << "----------------------------------------" << std::endl;
+	//std::cout << "\t\t" << "Rate" << "\t" << "Amount" << std::endl;
+	//std::cout << "MaxPwr:\t\t " << m_maxPwrSpawnRate << "\t  " << m_maxPwrAmount << std::endl;
+	//std::cout << "HighPwr:\t " << m_highPwrSpawnRate << "\t  " << m_highPwrAmount << std::endl;
+	//std::cout << "MediumPwr:\t " << m_mediumPwrSpawnRate << "\t  " << m_mediumPwrAmount << std::endl;
+	//std::cout << "LowPwr:\t\t " << m_lowPwrSpawnRate << "\t  " << m_lowPwrAmount << std::endl;
+	//std::cout << "----------------------------------------" << std::endl;
 }

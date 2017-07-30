@@ -11,6 +11,25 @@
 		"switchPad_texture" : "switchPad.png",
 		"uiPanel_texture" : "uiPanel.png",
 		"menu_texture" : "menu.png",
-		"gameOver_texture" : "gameOver.png"
+		"gameOver_texture" : "gameOver.png",
+		"power_texture" : "powerIcon.png",
+		"health_texture" : "healthIcon.png",
+		"powerOverlay_texture" : "powerOverlay.png",
+		"highPowerOverlay_texture" : "highPwrOverlay.png",
+		"mediumPowerOverlay_texture" : "mediumPwrOverlay.png",
+		"lowPowerOverlay_texture" : "lowPwrOverlay.png",
+		"noPowerOverlay_texture" : "noPwrOverlay.png"
+	},
+	"audio": {
+		"audio_folder_path" : "audio/",
+		"celldoor_sound" : "celldoor.wav",
+		"death1_sound" : "death1.wav",
+		"death2_sound" : "death2.wav",
+		"gunshot_sound" : "gunshot.wav",
+		"hit1_sound" : "hit1.wav",
+		"hit2_sound" : "hit2.wav",
+		"hit3_sound" : "hit3.wav",
+		"select_sound" : "select.wav",
+		"alarm_sound" : "alarm.wav"
 	}
 }

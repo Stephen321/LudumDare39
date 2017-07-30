@@ -5,7 +5,6 @@
 GameObject::GameObject(Type type) :
 	m_active(true) {
 	GameData& data = GameData::getInstance();
-	//TODO: use spritesheet instead
 	switch (type) {
 	case Type::Player:
 		m_sprite.setTexture(data.playerTexture);

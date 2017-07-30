@@ -52,7 +52,45 @@ void GameLoader::loadData(const std::string& filePath) {
 	ptr.menuTexture.loadFromFile(spritesPath + spritesIt->value.GetString());
 	++spritesIt;
 	ptr.gameOverTexture.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.powerIconTex.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.healthIconTex.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.powerOverlayTex.loadFromFile(spritesPath + spritesIt->value.GetString());
 
+	++spritesIt;
+	ptr.highPwrOverlayTex.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.mediumPwrOverlayTex.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.lowPwrOverlayTex.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.noPwrOverlayTex.loadFromFile(spritesPath + spritesIt->value.GetString());
+
+	
+	Value::ConstMemberIterator audioIT = it->value.GetObject().MemberBegin();
+	++it;
+	std::string audioPath = filePath + audioIT->value.GetString();
+	++audioIT;
+	ptr.cellDoorBuffer.loadFromFile(audioPath + audioIT->value.GetString());
+	++audioIT;
+	ptr.death1Buffer.loadFromFile(audioPath + audioIT->value.GetString());
+	++audioIT;
+	ptr.death2Buffer.loadFromFile(audioPath + audioIT->value.GetString());
+	++audioIT;
+	ptr.gunshotBuffer.loadFromFile(audioPath + audioIT->value.GetString());
+	++audioIT;
+	ptr.hit1Buffer.loadFromFile(audioPath + audioIT->value.GetString());
+	++audioIT;
+	ptr.hit2Buffer.loadFromFile(audioPath + audioIT->value.GetString());
+	++audioIT;
+	ptr.hit3Buffer.loadFromFile(audioPath + audioIT->value.GetString());
+	++audioIT;
+	ptr.selectBuffer.loadFromFile(audioPath + audioIT->value.GetString());
+	++audioIT;
+	ptr.alarmBuffer.loadFromFile(audioPath + audioIT->value.GetString());
+	
 	
 	ptr.levelFont.loadFromFile("assets/fonts/Prototype.ttf"); 
 }

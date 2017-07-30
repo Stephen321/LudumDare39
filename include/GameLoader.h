@@ -8,6 +8,7 @@ using namespace rapidjson;
 class GameLoader {
 public:
 	GameLoader(const std::string& filePath);
+
 private:
 	rapidjson::Document m_document;
 	std::string m_JSONData;

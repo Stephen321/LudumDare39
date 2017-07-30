@@ -63,6 +63,6 @@ namespace Helpers {
 			else
 				high = mid - 1;
 		}
-		return -1; //not found
+		return -1;
 	}
 }

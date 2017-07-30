@@ -1,7 +1,6 @@
 #include "Prisoner.h"
 #include "Helpers.h"
 #include "Constants.h"
-#include <iostream>
 
 Prisoner::Prisoner(const sf::Vector2f & startPosition, const sf::Vector2f& wayPointPosition) 
 	: GameObject(Type::Prisoner)
@@ -33,7 +32,6 @@ void Prisoner::update(float dt, const sf::Vector2f & playerPosition) {
 bool Prisoner::getCollided(const sf::Vector2f & playerPosition, const sf::Vector2f& playerSize) {
 	bool collided = false;
 	float distanceBetween = Helpers::getLength(playerPosition - m_position);
-	//its a square so just use the width as if its a radius
 	if (distanceBetween < (playerSize.x * 0.5f) + (m_sprite.getGlobalBounds().width * 0.5f)) {
 		collided = true;
 		m_active = false;
@@ -41,10 +39,10 @@ bool Prisoner::getCollided(const sf::Vector2f & playerPosition, const sf::Vector
 	return collided;
 }
 
-void Prisoner::decreaseHealth() {
+int Prisoner::decreaseHealth() {
 	m_health--;
 	if (m_health <= 0) {
-		//dead
 		m_active = false;
 	}
+	return m_health;
 }

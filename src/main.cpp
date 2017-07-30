@@ -18,17 +18,17 @@
 #pragma comment(lib,"opengl32.lib") 
 #pragma comment(lib,"glu32.lib") 
 
-#include <iostream> 
 #include <vector>
 #include "MenuScreen.h"
 #include "GameScreen.h"
 #include "GameOverScreen.h"
 #include "GameData.h"
 
+//Sometimes audio isnt loaded and console gets spammed with warnings and errors...???
 
 int main() {
 	srand((unsigned int)time(NULL));
-	sf::RenderWindow window(sf::VideoMode(1280u, 704u, 32u), "LudumDare39");
+	sf::RenderWindow window(sf::VideoMode(1280u, 704u, 32u), "Prison Escape");
 	std::vector<Screen*> Screens;
 	Screen::Type screen = Screen::Type::Menu;
 	MenuScreen menuScreen;
@@ -38,10 +38,7 @@ int main() {
 	GameOverScreen gameOverScreen;
 	Screens.push_back(&gameOverScreen);
 
-	//loading
 	GameLoader gameLoader("assets/");
-
-	//to scale up/down assuminng ratio is stil the same
 	GameData::getInstance().textureScaler = (float)window.getSize().x / GameData::getInstance().WINDOW_WIDTH;
 
 	while ((int)screen >= 0) {

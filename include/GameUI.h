@@ -13,6 +13,8 @@ public:
 	float getMaxPower() const;
 	void reset(int level = 1);
 	void setPrisonerInfo(int remaining, int max);
+	void decreasePowerLevel();
+
 private:
 	HealthBar m_health;
 	HealthBar m_power;
@@ -24,4 +26,13 @@ private:
 	sf::Text m_levelTxt;
 	sf::Text m_prisonersTxt;
 	sf::Sprite m_panel;
+	sf::Sprite m_powerIcon;
+	sf::Sprite m_healthIcon;
+	sf::Sprite m_powerOverlay;
+	int m_powerLevel;
+
+	sf::Sprite m_highPwrOverlay;
+	sf::Sprite m_mediumPwrOverlay;
+	sf::Sprite m_lowPwrOverlay;
+	sf::Sprite m_noPwrOverlay;
 };

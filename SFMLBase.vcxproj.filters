@@ -1,95 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\GameData.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameLoader.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameOverScreen.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GameScreen.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\MenuScreen.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\stdafx.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="include\GameObject.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Player.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="include\Bullet.cpp" />
-    <ClCompile Include="BulletPool.cpp" />
-    <ClCompile Include="include\Prisoner.cpp" />
-    <ClCompile Include="include\HealthBar.cpp" />
-    <ClCompile Include="include\GameUI.cpp" />
-    <ClCompile Include="include\PrisonManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="include\GameData.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GameLoader.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GameScreen.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Helpers.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GameOverScreen.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\MenuScreen.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Screen.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\stdafx.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\targetver.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GameObject.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Player.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="BulletPool.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Bullet.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Prisoner.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\HealthBar.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\GameUI.h">
-      <Filter>include</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Constants.h" />
-    <ClInclude Include="include\PrisonManager.h">
-      <Filter>include</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="include">
       <UniqueIdentifier>{d11a23da-dced-4a5f-8c2a-e1c20ec9ac06}</UniqueIdentifier>
     </Filter>
@@ -104,5 +15,114 @@
     <None Include="assets\data.json">
       <Filter>assets</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\AudioManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Bullet.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BulletPool.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Constants.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameData.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameLoader.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameObject.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameOverScreen.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameScreen.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameUI.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\HealthBar.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Helpers.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MenuScreen.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Prisoner.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PrisonManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Screen.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\stdafx.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\targetver.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\AudioManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Bullet.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BulletPool.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameData.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameLoader.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameOverScreen.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameScreen.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameUI.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\HealthBar.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MenuScreen.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Prisoner.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PrisonManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stdafx.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
