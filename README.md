@@ -1,3 +1,12 @@
+Made for Ludum Dare 39. The theme was "Running out of power".
+
+Description:
+
+Use W,A,S,D to move. Left click to shoot and mouse to aim.
+The power is running out and prisoners are escaping! Defend yourself against the angry
+mob. As the power decreases more prisoners are released from cells. The exit doors 
+will open once the power hits 0 and all the prisoners are dead.
+
 Technologies used:
 
 C++
