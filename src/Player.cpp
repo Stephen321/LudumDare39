@@ -34,7 +34,7 @@ void Player::update(float dt) {
 			bulletPos += Helpers::normaliseCopy(m_direction) *
 						(m_sprite.getGlobalBounds().width * 0.5f); 
 			if (m_bulletPool.fire(bulletPos, m_direction)) {
-				sf::Vector2f knockBack = -velocity;
+				sf::Vector2f knockBack = -m_direction;
 				Helpers::limit(knockBack, 5);
 				m_position += knockBack;
 			}

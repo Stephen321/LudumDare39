@@ -33,12 +33,6 @@ void GameObject::update(float dt) {
 void GameObject::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 	if (m_active)
 		target.draw(m_sprite);
-	else //debug
-	{
-		sf::Sprite s = m_sprite;
-		s.setColor(sf::Color(255, 0, 0));
-		target.draw(s);
-	}
 }
 
 sf::Vector2f GameObject::getPosition() const {

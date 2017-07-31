@@ -15,9 +15,9 @@ Screen::Type GameOverScreen::run(sf::RenderWindow &window) {
 	sf::Sprite gameOver(GameData::getInstance().gameOverTexture);
 	gameOver.setPosition(0.f, 0.f);
 	gameOver.setScale(bounds.width / gameOver.getLocalBounds().width, bounds.height / gameOver.getLocalBounds().height);
-	sf::Text text("", GameData::getInstance().levelFont, 3 * TILE_SIZE * bounds.width);
+	sf::Text text("", GameData::getInstance().levelFont, 1.5 * TILE_SIZE * bounds.width);
 	text.setFillColor(sf::Color(255,106,0));
-	text.setPosition(0.469f * bounds.width, bounds.height * 0.463f);
+	text.setPosition(0.475f * bounds.width, bounds.height * 0.54f);
 	text.setStyle(sf::Text::Regular);
 	text.setString(std::to_string(GameData::getInstance().levelReached + 1));
 
