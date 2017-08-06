@@ -22,6 +22,5 @@ private:
 	void createBulletEmitter(std::vector<Bullet>& bullets, int i);
 	sf::Vector2f getRectCentre(const sf::IntRect& rect);
 	void addShadowPolys(sf::VertexArray& vertexArray, const std::vector<std::pair<sf::Vector2f, float>>& centres, float radius, const std::pair<bool,sf::IntRect> light);
-	bool circleRectCollision(std::pair<sf::Vector2f, float> circle, sf::IntRect rect);
 	sf::Vector2f rotateVector(const sf::Vector2f& v, float degrees);
 };
