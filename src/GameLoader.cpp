@@ -58,7 +58,7 @@ void GameLoader::loadData(const std::string& filePath) {
 	ptr.healthIconTex.loadFromFile(spritesPath + spritesIt->value.GetString());
 	++spritesIt;
 	ptr.powerOverlayTex.loadFromFile(spritesPath + spritesIt->value.GetString());
-
+	
 	++spritesIt;
 	ptr.highPwrOverlayTex.loadFromFile(spritesPath + spritesIt->value.GetString());
 	++spritesIt;
@@ -67,7 +67,31 @@ void GameLoader::loadData(const std::string& filePath) {
 	ptr.lowPwrOverlayTex.loadFromFile(spritesPath + spritesIt->value.GetString());
 	++spritesIt;
 	ptr.noPwrOverlayTex.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.prisonerBloodTex.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.deathBloodTex.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.particle1Tex.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.mouseTex.loadFromFile(spritesPath + spritesIt->value.GetString());
 
+
+	++spritesIt;
+	ptr.lmMax.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.lmHigh.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.lmMed.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.lmLow.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.lmNo.loadFromFile(spritesPath + spritesIt->value.GetString());
+
+	++spritesIt;
+	ptr.playerLightTex.loadFromFile(spritesPath + spritesIt->value.GetString());
+	++spritesIt;
+	ptr.shadowTex.loadFromFile(spritesPath + spritesIt->value.GetString());
 	
 	Value::ConstMemberIterator audioIT = it->value.GetObject().MemberBegin();
 	++it;

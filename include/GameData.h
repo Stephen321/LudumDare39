@@ -30,6 +30,18 @@ public:
 	sf::Texture mediumPwrOverlayTex;
 	sf::Texture lowPwrOverlayTex;
 	sf::Texture noPwrOverlayTex;
+	sf::Texture prisonerBloodTex;
+	sf::Texture deathBloodTex;
+	sf::Texture particle1Tex;
+	sf::Texture mouseTex;
+	//TODO: use array
+	sf::Texture lmMax;
+	sf::Texture lmHigh;
+	sf::Texture lmMed;
+	sf::Texture lmLow;
+	sf::Texture lmNo;
+	sf::Texture playerLightTex;
+	sf::Texture shadowTex;
 
 	sf::SoundBuffer cellDoorBuffer;
 	sf::SoundBuffer death1Buffer;

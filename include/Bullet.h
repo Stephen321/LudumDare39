@@ -7,6 +7,7 @@ public:
 	Bullet();
 	void fire(sf::Vector2f startPosition, sf::Vector2f direction);
 	void update(float dt) override;
+	sf::Vector2f getVelocity() const;
 
 private:
 	const float MOVE_SPEED = 450.f;

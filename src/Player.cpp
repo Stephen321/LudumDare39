@@ -1,5 +1,7 @@
 #include "Player.h"
 #include "Helpers.h"
+#include "GameData.h"
+
 Player::Player(const sf::Vector2f& startPosition, BulletPool& bulletPool) :
 	GameObject(Type::Player)
 	, m_firing(false)
@@ -7,6 +9,7 @@ Player::Player(const sf::Vector2f& startPosition, BulletPool& bulletPool) :
 	, m_reloadTimer(0.f)
 	, m_startX(startPosition.x) {
 	m_position = startPosition;
+	
 }
 
 void Player::update(float dt) {
@@ -25,6 +28,13 @@ void Player::update(float dt) {
 	}
 	Helpers::limit(velocity, MOVE_SPEED);
 	m_position += velocity * dt;
+
+	if (Helpers::getLength(velocity) <= 0.05f) {
+		setPlayAnimation(false);
+	}
+	else {
+		setPlayAnimation(true);
+	}
 
 	m_reloadTimer += dt;
 	if (m_firing) {

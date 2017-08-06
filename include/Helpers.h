@@ -4,12 +4,12 @@
 
 namespace Helpers {
 	//clamps a value between min and max-1
-	inline int clamp(int value, int min, int max) {
-		if (value < 0) {
-			return max - 1;
+	inline float clamp(float value, float min, float max) {
+		if (value < min) {
+			return min;
 		}
 		if (value >= max) {
-			return 0;
+			return max;
 		}
 
 		return value;
@@ -48,6 +48,29 @@ namespace Helpers {
 			v = Helpers::normaliseCopy(v) * max;
 		}
 	}
+
+
+
+	inline sf::Vector2f lerp(const sf::Vector2f & v1, const sf::Vector2f & v2, float percent) {
+		if (percent > 1.f)
+			percent = 1.f;
+		else if (percent < 0.f)
+			percent = 0.f;
+		sf::Vector2f v = v2 - v1;
+		float distanceAlong = getLength(v) * percent;
+
+		v = v1 + (normaliseCopy(v) * distanceAlong);
+		return v;
+	}
+
+	inline float lerp(float start, float end, float percent) {
+		if (percent > 1.f)
+			percent = 1.f;
+		else if (percent < 0.f)
+			percent = 0.f;
+		return start + ((end - start) * percent);
+	}
+
 	template<typename T, typename Comparer1, typename Comparer2 = Comparer1>
 	inline int binarySearch(const std::vector<T>& v, const T& target, Comparer1 equals, Comparer2 lessThanEquals) {
 		int low = 0;

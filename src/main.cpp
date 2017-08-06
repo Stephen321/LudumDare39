@@ -29,6 +29,7 @@
 int main() {
 	srand((unsigned int)time(NULL));
 	sf::RenderWindow window(sf::VideoMode(1280u, 704u, 32u), "Prison Escape", 5U);
+	window.setMouseCursorVisible(false);
 	std::vector<Screen*> Screens;
 	Screen::Type screen = Screen::Type::Menu;
 	MenuScreen menuScreen;

@@ -103,3 +103,8 @@ void GameUI::setPrisonerInfo(int remaining, int max) {
 void GameUI::decreasePowerLevel() {
 	m_powerLevel--;
 }
+
+void GameUI::update(float dt) {
+	m_health.update(dt);
+	m_power.update(dt);
+}

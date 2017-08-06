@@ -1,13 +1,22 @@
 #include "Prisoner.h"
 #include "Helpers.h"
 #include "Constants.h"
+#include "GameData.h"
 
-Prisoner::Prisoner(const sf::Vector2f & startPosition, const sf::Vector2f& wayPointPosition) 
+Prisoner::Prisoner(const sf::Vector2f & startPosition, const sf::Vector2f& wayPointPosition)
 	: GameObject(Type::Prisoner)
 	, m_health(PRISONER_HEALTH)
 	, m_waypointReached(false)
-	, m_wayPointPosition(wayPointPosition) {
+	, m_wayPointPosition(wayPointPosition)
+	, m_showBlood(false) {
 	m_position = startPosition;
+
+	m_bloodTex.setTexture(GameData::getInstance().prisonerBloodTex);
+	if (GameData::getInstance().textureScaler != 1.f) {
+		m_bloodTex.setScale(GameData::getInstance().textureScaler, GameData::getInstance().textureScaler);
+	}
+	m_bloodTex.setOrigin(m_bloodTex.getGlobalBounds().width * 0.5f
+					   , m_bloodTex.getGlobalBounds().height * 0.5f);
 }
 
 void Prisoner::update(float dt, const sf::Vector2f & playerPosition) {
@@ -26,6 +35,11 @@ void Prisoner::update(float dt, const sf::Vector2f & playerPosition) {
 		Helpers::limit(velocity, MOVE_SPEED);
 	}
 	m_position += velocity * dt;
+
+	if (m_showBlood) {
+		m_bloodTex.setPosition(m_position);
+		m_bloodTex.setRotation(m_sprite.getRotation());
+	}
 	GameObject::update(dt);
 }
 
@@ -41,8 +55,15 @@ bool Prisoner::getCollided(const sf::Vector2f & playerPosition, const sf::Vector
 
 int Prisoner::decreaseHealth() {
 	m_health--;
+	m_showBlood = true;
 	if (m_health <= 0) {
 		m_active = false;
 	}
 	return m_health;
+}
+
+void Prisoner::draw(sf::RenderTarget & target, sf::RenderStates states) const {
+	GameObject::draw(target, states);
+	if (m_showBlood)
+		target.draw(m_bloodTex, states);
 }

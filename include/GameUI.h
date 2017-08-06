@@ -14,6 +14,7 @@ public:
 	void reset(int level = 1);
 	void setPrisonerInfo(int remaining, int max);
 	void decreasePowerLevel();
+	void update(float dt);
 
 private:
 	HealthBar m_health;

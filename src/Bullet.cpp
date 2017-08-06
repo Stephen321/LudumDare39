@@ -29,3 +29,7 @@ void Bullet::update(float dt) {
 	}
 	GameObject::update(dt);
 }
+
+sf::Vector2f Bullet::getVelocity() const {
+	return m_velocity;
+}

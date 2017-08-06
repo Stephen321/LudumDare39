@@ -15,6 +15,18 @@
     <None Include="assets\data.json">
       <Filter>assets</Filter>
     </None>
+    <None Include="assets\shaders\lighting.frag">
+      <Filter>assets</Filter>
+    </None>
+    <None Include="assets\shaders\lighting.vert">
+      <Filter>assets</Filter>
+    </None>
+    <None Include="assets\shaders\shadow.frag">
+      <Filter>assets</Filter>
+    </None>
+    <None Include="assets\shaders\shadow.vert">
+      <Filter>assets</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AudioManager.h">
@@ -74,6 +86,9 @@
     <ClInclude Include="include\targetver.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\BloodManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\AudioManager.cpp">
@@ -122,6 +137,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\stdafx.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BloodManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

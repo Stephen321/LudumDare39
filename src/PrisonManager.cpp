@@ -68,12 +68,12 @@ int PrisonManager::update(float dt, const sf::Vector2f& playerPosition, const sf
 
 void PrisonManager::draw(sf::RenderTarget & target, sf::RenderStates states) const {
 	for (int i = 0; i < m_prisoners.size(); i++) {
-		target.draw(*m_prisoners[i]);
+		target.draw(*m_prisoners[i], states);
 	}
 
 	for (auto it = m_spawns.begin(); it != m_spawns.end(); ++it) {
 		if (it->second.active == false)
-			target.draw(it->second.sprite);
+			target.draw(it->second.sprite, states);
 	}
 }
 

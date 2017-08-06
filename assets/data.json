@@ -18,7 +18,18 @@
 		"highPowerOverlay_texture" : "highPwrOverlay.png",
 		"mediumPowerOverlay_texture" : "mediumPwrOverlay.png",
 		"lowPowerOverlay_texture" : "lowPwrOverlay.png",
-		"noPowerOverlay_texture" : "noPwrOverlay.png"
+		"noPowerOverlay_texture" : "noPwrOverlay.png",
+		"prisoner_blood_texture" : "prisoner_blood.png",
+		"deathBlood_texture" : "deathBlood.png",
+		"particle1_texture" : "particle1.png",
+		"mouse_texture" : "mouse.png",
+		"lightingmaskMax_texture" : "lightingmaskMax.png",
+		"lightingmaskHigh_texture" : "lightingmaskHigh.png",
+		"lightingmaskMed_texture" : "lightingmaskMed.png",
+		"lightingmaskLow_texture" : "lightingmaskLow.png",
+		"lightingmaskNo_texture" : "lightingmaskNo.png",
+		"playerLight_texture" : "playerLight.png",
+		"shadow_texture" : "shadow.png"
 	},
 	"audio": {
 		"audio_folder_path" : "audio/",
