@@ -14,6 +14,7 @@
 
 namespace {
 	const unsigned int BULLET_POOL_SIZE = 100;
+	const float SCREEN_FADE_TIME = 1.5f;
 }
 
 //https://stackoverflow.com/a/14795484
@@ -84,6 +85,11 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 	sf::Texture* currentLm = &data.lmMax;
 
 	const int LightHeight = windowSize.y;
+
+	sf::RectangleShape screenHider((sf::Vector2f)windowSize);
+	screenHider.setFillColor(sf::Color::Black);
+	float fadeTimer = 0;
+	bool faded = false;
 
 
 	std::pair<bool, sf::IntRect> lights[LIGHTS];
@@ -187,6 +193,14 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 		float dt = dtTime.asSeconds();
 		if (dt > 0.3f || pause)
 			dt = 0.f;
+
+		if (fadeTimer < SCREEN_FADE_TIME) {
+			fadeTimer += dt;
+			screenHider.setFillColor(sf::Color(0, 0, 0, Helpers::lerp(255, 0, fadeTimer / SCREEN_FADE_TIME)));
+			if (fadeTimer > SCREEN_FADE_TIME) {
+				faded = true;
+			}
+		}
 
 		sf::Vector2f mousePosition = (sf::Vector2f)sf::Mouse::getPosition(window);
 		sf::Vector2f direction = mousePosition - player.getPosition();
@@ -306,6 +320,9 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 					lights[0].first = true;
 					lights[1].first = true;
 					lights[2].first = true;
+					screenHider.setFillColor(sf::Color::Black);
+					faded = false;
+					fadeTimer = 0;
 					m_powerDecreasePerSecond += POWER_CHANGE_PER_LEVEL;
 					if (m_powerDecreasePerSecond > POWER_DRAIN_MAX)
 						m_powerDecreasePerSecond = POWER_DRAIN_MAX;
@@ -364,6 +381,7 @@ Screen::Type GameScreen::run(sf::RenderWindow &window) {
 		//	window.draw(c);
 		//	window.draw(r);
 		//}
+		window.draw(screenHider);
 		window.display();
 	}
 
@@ -445,127 +463,109 @@ void GameScreen::addShadowPolys(sf::VertexArray & vertexArray, const std::vector
 		sf::Vector2f centre = getRectCentre(rect);
 
 		for (int j = 0; j < centres.size(); j++) {
-			if (circleRectCollision(std::pair<sf::Vector2f, float>(centres[j].first, radius), rect)) {
-				//found an object that this light will cause a shadow on
-				sf::Vector2f shadowCentre = centres[j].first; 
+			sf::Vector2f shadowCentre = centres[j].first;
 
-				float distanceToLight = Helpers::getLength(shadowCentre - centre);
+			float distanceToLight = Helpers::getLength(shadowCentre - centre);
 
-				if (distanceToLight > 140 || distanceToLight < 30) {
-					continue;
-				}
-
-				float degrees = centres[j].second;
-				sf::Vector2f v1(radius, 0);
-				v1 = shadowCentre + rotateVector(v1, degrees);
-				sf::Vector2f v2(-radius, 0);
-				v2 = shadowCentre + rotateVector(v2, degrees);
-
-				sf::Vector2f v1Extended = v1 + (3000.f * Helpers::normaliseCopy(v1 - centre));
-				sf::Vector2f v2Extended = v2 + (3000.f * Helpers::normaliseCopy(v2 - centre));
-
-				//test
-				sf::Vector2f screenCentre(WINDOW_WIDTH * 0.5f, WINDOW_HEIGHT * 0.5f);
-
-				//work out bounds
-				sf::Vector2f topBoundsP1(0.f, 0.f);
-				sf::Vector2f topBoundsP2(WINDOW_WIDTH, 0.f);
-				sf::Vector2f bottomBoundsP1(0.f, WINDOW_HEIGHT);
-				sf::Vector2f bottomBoundsP2(WINDOW_WIDTH, WINDOW_HEIGHT);
-				sf::Vector2f leftBoundsP1(0.f, 0.f);
-				sf::Vector2f leftBoundsP2(0.f, WINDOW_HEIGHT);
-				sf::Vector2f rightBoundsP1(WINDOW_WIDTH, 0.f);
-				sf::Vector2f rightBoundsP2(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-				float intersectionX = 0;
-				float intersectionY = 0;
-				if (get_line_intersection(topBoundsP1.x, topBoundsP1.y, topBoundsP2.x, topBoundsP2.y, v1.x, v1.y, v1Extended.x, v1Extended.y, &intersectionX, &intersectionY)) {
-				}
-				else if (get_line_intersection(bottomBoundsP1.x, bottomBoundsP1.y, bottomBoundsP2.x, bottomBoundsP2.y, v1.x, v1.y, v1Extended.x, v1Extended.y, &intersectionX, &intersectionY)) {
-				}
-				else if (get_line_intersection(leftBoundsP1.x, leftBoundsP1.y, leftBoundsP2.x, leftBoundsP2.y, v1.x, v1.y, v1Extended.x, v1Extended.y, &intersectionX, &intersectionY)) {
-				}
-				else if (get_line_intersection(rightBoundsP1.x, rightBoundsP1.y, rightBoundsP2.x, rightBoundsP2.y, v1.x, v1.y, v1Extended.x, v1Extended.y, &intersectionX, &intersectionY)) {
-				}
-				sf::Vector2f v3(intersectionX, intersectionY);
-				intersectionX = 0;
-				intersectionY = 0;
-
-				if (get_line_intersection(topBoundsP1.x, topBoundsP1.y, topBoundsP2.x, topBoundsP2.y, v2.x, v2.y, v2Extended.x, v2Extended.y, &intersectionX, &intersectionY)) {
-				}
-				else if (get_line_intersection(bottomBoundsP1.x, bottomBoundsP1.y, bottomBoundsP2.x, bottomBoundsP2.y, v2.x, v2.y, v2Extended.x, v2Extended.y, &intersectionX, &intersectionY)) {
-				}
-				else if (get_line_intersection(leftBoundsP1.x, leftBoundsP1.y, leftBoundsP2.x, leftBoundsP2.y, v2.x, v2.y, v2Extended.x, v2Extended.y, &intersectionX, &intersectionY)) {
-				}
-				else if (get_line_intersection(rightBoundsP1.x, rightBoundsP1.y, rightBoundsP2.x, rightBoundsP2.y, v2.x, v2.y, v2Extended.x, v2Extended.y, &intersectionX, &intersectionY)) {
-				}
-				sf::Vector2f v4(intersectionX, intersectionY);
-				//	---------------->
-				//	|				|
-				//	|				|
-				//	v				v
-				//	---------------->
-
-				sf::Vector2f center = (v1 + v2 + v3 + v4) / 4.f;
-
-				std::vector<sf::Vector2f> sorted;
-				sorted.push_back(v1);
-				sorted.push_back(v2);
-				sorted.push_back(v3);
-				sorted.push_back(v4);
-
-				//sort vertices to be clockwise
-
-				//https://stackoverflow.com/a/6989383
-				std::sort(sorted.begin(), sorted.end(), [=] (sf::Vector2f a, sf::Vector2f b) -> bool {
-					if (a.x - center.x >= 0 && b.x - center.x < 0)
-						return true;
-					if (a.x - center.x < 0 && b.x - center.x >= 0)
-						return false;
-					if (a.x - center.x == 0 && b.x - center.x == 0) {
-						if (a.y - center.y >= 0 || b.y - center.y >= 0)
-							return a.y > b.y;
-						return b.y > a.y;
-					}
-
-					// compute the cross product of vectors (center -> a) x (center -> b)
-					int det = (a.x - center.x) * (b.y - center.y) - (b.x - center.x) * (a.y - center.y);
-					if (det < 0)
-						return true;
-					if (det > 0)
-						return false;
-
-					// points a and b are on the same line from the center
-					// check which point is closer to the center
-					int d1 = (a.x - center.x) * (a.x - center.x) + (a.y - center.y) * (a.y - center.y);
-					int d2 = (b.x - center.x) * (b.x - center.x) + (b.y - center.y) * (b.y - center.y);
-					return d1 > d2;
-				});
-
-				float w = GameData::getInstance().shadowTex.getSize().x;
-				float h = GameData::getInstance().shadowTex.getSize().y;
-				vertexArray.append(sf::Vertex(sorted[0], sf::Vector2f(0.f, 0.f)));
-				vertexArray.append(sf::Vertex(sorted[1], sf::Vector2f(w, 0.f)));
-				vertexArray.append(sf::Vertex(sorted[2], sf::Vector2f(w, h)));
-				vertexArray.append(sf::Vertex(sorted[3], sf::Vector2f(0.f, h)));
+			if (distanceToLight > 700 || distanceToLight < 5) {
+				continue;
 			}
+
+			float degrees = centres[j].second;
+			sf::Vector2f v1(radius, 0);
+			v1 = shadowCentre + rotateVector(v1, degrees);
+			sf::Vector2f v2(-radius, 0);
+			v2 = shadowCentre + rotateVector(v2, degrees);
+
+			sf::Vector2f v1Extended = v1 + (3000.f * Helpers::normaliseCopy(v1 - centre));
+			sf::Vector2f v2Extended = v2 + (3000.f * Helpers::normaliseCopy(v2 - centre));
+
+			//test
+			sf::Vector2f screenCentre(WINDOW_WIDTH * 0.5f, WINDOW_HEIGHT * 0.5f);
+
+			//work out bounds
+			sf::Vector2f topBoundsP1(0.f, 0.f);
+			sf::Vector2f topBoundsP2(WINDOW_WIDTH, 0.f);
+			sf::Vector2f bottomBoundsP1(0.f, WINDOW_HEIGHT);
+			sf::Vector2f bottomBoundsP2(WINDOW_WIDTH, WINDOW_HEIGHT);
+			sf::Vector2f leftBoundsP1(0.f, 0.f);
+			sf::Vector2f leftBoundsP2(0.f, WINDOW_HEIGHT);
+			sf::Vector2f rightBoundsP1(WINDOW_WIDTH, 0.f);
+			sf::Vector2f rightBoundsP2(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+			float intersectionX = 0;
+			float intersectionY = 0;
+			if (get_line_intersection(topBoundsP1.x, topBoundsP1.y, topBoundsP2.x, topBoundsP2.y, v1.x, v1.y, v1Extended.x, v1Extended.y, &intersectionX, &intersectionY)) {
+			}
+			else if (get_line_intersection(bottomBoundsP1.x, bottomBoundsP1.y, bottomBoundsP2.x, bottomBoundsP2.y, v1.x, v1.y, v1Extended.x, v1Extended.y, &intersectionX, &intersectionY)) {
+			}
+			else if (get_line_intersection(leftBoundsP1.x, leftBoundsP1.y, leftBoundsP2.x, leftBoundsP2.y, v1.x, v1.y, v1Extended.x, v1Extended.y, &intersectionX, &intersectionY)) {
+			}
+			else if (get_line_intersection(rightBoundsP1.x, rightBoundsP1.y, rightBoundsP2.x, rightBoundsP2.y, v1.x, v1.y, v1Extended.x, v1Extended.y, &intersectionX, &intersectionY)) {
+			}
+			sf::Vector2f v3(intersectionX, intersectionY);
+			intersectionX = 0;
+			intersectionY = 0;
+
+			if (get_line_intersection(topBoundsP1.x, topBoundsP1.y, topBoundsP2.x, topBoundsP2.y, v2.x, v2.y, v2Extended.x, v2Extended.y, &intersectionX, &intersectionY)) {
+			}
+			else if (get_line_intersection(bottomBoundsP1.x, bottomBoundsP1.y, bottomBoundsP2.x, bottomBoundsP2.y, v2.x, v2.y, v2Extended.x, v2Extended.y, &intersectionX, &intersectionY)) {
+			}
+			else if (get_line_intersection(leftBoundsP1.x, leftBoundsP1.y, leftBoundsP2.x, leftBoundsP2.y, v2.x, v2.y, v2Extended.x, v2Extended.y, &intersectionX, &intersectionY)) {
+			}
+			else if (get_line_intersection(rightBoundsP1.x, rightBoundsP1.y, rightBoundsP2.x, rightBoundsP2.y, v2.x, v2.y, v2Extended.x, v2Extended.y, &intersectionX, &intersectionY)) {
+			}
+			sf::Vector2f v4(intersectionX, intersectionY);
+			//	---------------->
+			//	|				|
+			//	|				|
+			//	v				v
+			//	---------------->
+
+			sf::Vector2f center = (v1 + v2 + v3 + v4) / 4.f;
+
+			std::vector<sf::Vector2f> sorted;
+			sorted.push_back(v1);
+			sorted.push_back(v2);
+			sorted.push_back(v3);
+			sorted.push_back(v4);
+
+			//sort vertices to be clockwise
+
+			//https://stackoverflow.com/a/6989383
+			std::sort(sorted.begin(), sorted.end(), [=](sf::Vector2f a, sf::Vector2f b) -> bool {
+				if (a.x - center.x >= 0 && b.x - center.x < 0)
+					return true;
+				if (a.x - center.x < 0 && b.x - center.x >= 0)
+					return false;
+				if (a.x - center.x == 0 && b.x - center.x == 0) {
+					if (a.y - center.y >= 0 || b.y - center.y >= 0)
+						return a.y > b.y;
+					return b.y > a.y;
+				}
+
+				// compute the cross product of vectors (center -> a) x (center -> b)
+				int det = (a.x - center.x) * (b.y - center.y) - (b.x - center.x) * (a.y - center.y);
+				if (det < 0)
+					return true;
+				if (det > 0)
+					return false;
+
+				// points a and b are on the same line from the center
+				// check which point is closer to the center
+				int d1 = (a.x - center.x) * (a.x - center.x) + (a.y - center.y) * (a.y - center.y);
+				int d2 = (b.x - center.x) * (b.x - center.x) + (b.y - center.y) * (b.y - center.y);
+				return d1 > d2;
+			});
+
+			float w = GameData::getInstance().shadowTex.getSize().x;
+			float h = GameData::getInstance().shadowTex.getSize().y;
+			vertexArray.append(sf::Vertex(sorted[0], sf::Vector2f(0.f, 0.f)));
+			vertexArray.append(sf::Vertex(sorted[1], sf::Vector2f(w, 0.f)));
+			vertexArray.append(sf::Vertex(sorted[2], sf::Vector2f(w, h)));
+			vertexArray.append(sf::Vertex(sorted[3], sf::Vector2f(0.f, h)));
 		}
 	}
-}
-
-bool GameScreen::circleRectCollision(std::pair<sf::Vector2f, float> circle, sf::IntRect rect) {
-	//https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
-	// Find the closest point to the circle within the rectangle
-	float closestX = Helpers::clamp(circle.first.x, rect.left, rect.left + rect.width);
-	float closestY = Helpers::clamp(circle.first.y, rect.top, rect.top + rect.height);
-
-	// Calculate the distance between the circle's center and this closest point
-	float distanceX = circle.first.x - closestX;
-	float distanceY = circle.first.y - closestY;
-
-	// If the distance is less than the circle's radius, an intersection occurs
-	float distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
-	return distanceSquared < (circle.second * circle.second);
 }
 
 sf::Vector2f GameScreen::rotateVector(const sf::Vector2f & v, float degrees) {

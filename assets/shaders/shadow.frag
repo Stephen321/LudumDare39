@@ -17,9 +17,7 @@ void main()
 	
 	
 	float a = 1;
-	if (d > 170)
-		a = 0;
-	else
-		a = 1 - (d / 170);
+	a = 1 / (d / 900);
+	a = a / 100.0;
 	gl_FragColor.a = a;
 }
